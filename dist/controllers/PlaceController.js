@@ -33,6 +33,19 @@ export const getAmenityTypes = async (req, res, next) => {
         next(error);
     }
 };
+export const getNearbyPlaces = async (req, res, next) => {
+    try {
+        const lat = Number(req.query.lat);
+        const lon = Number(req.query.lon);
+        const amenity = String(req.query.amenity);
+        const radius = Number(req.query.radius) || 2000;
+        const nearbyPlace = await placeModel.nearbyPlace(lon, lat, amenity, radius);
+        res.json(nearbyPlace);
+    }
+    catch (error) {
+        next(error);
+    }
+};
 /**
  * Lấy địa điểm theo ID (kèm rating trung bình)
  */

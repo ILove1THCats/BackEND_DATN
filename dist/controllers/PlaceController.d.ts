@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
 export declare const getAllPlaces: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const getSpecificPlace: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const getAmenityTypes: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getNearbyPlaces: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 /**
  * Lấy địa điểm theo ID (kèm rating trung bình)
  */

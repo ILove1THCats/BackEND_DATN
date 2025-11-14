@@ -13,11 +13,30 @@ export const getAllPlaces = async () => {
  * @return
  */
 export const getSpecificPlace = async (amenity) => {
-    const result = await pool.query(`SELECT ST_X(geom) AS long, ST_Y(geom) AS lat FROM places where amenity = $1`, [amenity]);
+    const result = await pool.query(`SELECT ST_X(geom) AS long, ST_Y(geom) AS lat, operator, name FROM places where amenity = $1`, [amenity]);
     return result.rows;
 };
 export const amenityType = async () => {
     const result = await pool.query(`SELECT distinct amenity FROM places `);
+    return result.rows;
+};
+export const nearbyPlace = async (lat, lon, amenity, radius) => {
+    const result = await pool.query(`
+      SELECT id, ST_X(geom) AS long, ST_Y(geom) AS lat, amenity, opening_hours, brand, operator, name,
+        ST_Distance(
+          geom,
+          ST_SetSRID(ST_MakePoint($1, $2), 4326)
+        ) AS distance
+      FROM places
+      WHERE amenity = $3
+        AND ST_DWithin(
+          geom,
+          ST_SetSRID(ST_MakePoint($1, $2), 4326),
+          $4
+        )
+      ORDER BY distance ASC
+    `, [lon, lat, amenity, radius]);
+    console.log(result);
     return result.rows;
 };
 /**

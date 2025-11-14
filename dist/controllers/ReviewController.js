@@ -97,4 +97,12 @@ export const getAverageRatingByPlace = async (req, res, next) => {
         next(error);
     }
 };
+export const likeUpdatePlace = async (req, res, next) => {
+    try {
+        const like = 1;
+    }
+    catch (e) {
+        next(e);
+    }
+};
 //# sourceMappingURL=ReviewController.js.map

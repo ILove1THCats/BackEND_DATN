@@ -31,4 +31,5 @@ export declare const deleteReview: (req: Request, res: Response, next: NextFunct
  * GET /reviews/average/:placeId
  */
 export declare const getAverageRatingByPlace: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const likeUpdatePlace: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 //# sourceMappingURL=ReviewController.d.ts.map

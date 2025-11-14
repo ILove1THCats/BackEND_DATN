@@ -59,4 +59,13 @@ export const getAverageRatingByPlace = async (placeId) => {
      GROUP BY place_id`, [placeId]);
     return result.rows[0] || { avg_rating: 0, total_reviews: 0 };
 };
+// export const likeUpdatePlace = async() => {
+//   const result = await pool.query(
+//     `SELECT 
+//       COUNT(*) AS
+//     FROM reviews
+//     WHERE place_id =$1
+//     GROUP BY place = id`, [placeI]
+//   );
+// }
 //# sourceMappingURL=reviewModel.js.map

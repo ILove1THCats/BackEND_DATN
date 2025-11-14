@@ -88,16 +88,52 @@ export const deleteReview = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
-/**
- * Lấy trung bình rating của một địa điểm
- * GET /reviews/average/:placeId
- */
-export const getAverageRatingByPlace = async (req: Request, res: Response, next: NextFunction) => {
+//Lấy like địa điểm hiện tại
+export const getlikePlace = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const placeId = Number(req.params.placeId);
-    const data = await reviewModel.getAverageRatingByPlace(placeId);
-    res.json(data);
-  } catch (error) {
-    next(error);
+    const like = await reviewModel.getLikePlace(placeId);
+
+    res.json(like);
+  } catch (e) {
+    next(e);
   }
 };
+
+//Code này lần 1 là like, chạy lần 2 là bỏ like
+export const upLike = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userid = req.body.userid;
+    const placeid =  req.body.placeid;
+
+    await reviewModel.upLike( userid, placeid);
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const getReviewFromPlace = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const place = Number(req.params.placeId);
+
+    const result = await reviewModel.getReviewFromPlace( place );
+
+    res.json(result);
+  } catch (error) {
+    next(error)
+  }
+};
+
+export const reviewInsert = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { placeid, userid, rating, comment, time } = req.body.review;
+
+    const result = await reviewModel.reviewInsert( placeid, userid, rating, comment, time );
+
+    res.json(result);
+  } catch (error) {
+    
+    next(error)
+  }
+};
+

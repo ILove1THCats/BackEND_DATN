@@ -106,18 +106,33 @@ export const getUserByEmail = async (req: Request, res: Response, next: NextFunc
     };
   };
 
-  export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { email } = req.body;
-      if (!email) return res.status(400).json({ message: "Thiếu email" });
+export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Thiếu email" });
 
-      const user = await userModel.getUserByEmail(email);
-      if (!user) return res.status(404).json({ message: "Không tìm thấy tài khoản" });
+    const user = await userModel.getUserByEmail(email);
+    if (!user) return res.status(404).json({ message: "Không tìm thấy tài khoản" });
 
-      // 👉 Ở đây bạn có thể dùng thư viện như nodemailer để gửi email reset password thật
-      // hoặc đơn giản trả về success để test
-      res.json({ success: true, message: "Email reset password đã được gửi (giả lập)" });
-    } catch (error) {
-      next(error);
+    // 👉 Ở đây bạn có thể dùng thư viện như nodemailer để gửi email reset password thật
+    // hoặc đơn giản trả về success để test
+    res.json({ success: true, message: "Email reset password đã được gửi (giả lập)" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getProfile = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Number(req.params.userid);
+    if (!id) {
+      return res.status(400).json({ message: 'ID parameter is required' });
     }
+
+    const user = await userModel.getUserById(id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user);
+  } catch (error) {
+    next(error);
   };
+};

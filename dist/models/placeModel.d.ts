@@ -24,7 +24,8 @@ export declare const getAllPlaces: () => Promise<Place[]>;
  * @return
  */
 export declare const getSpecificPlace: (amenity: string) => Promise<Place[]>;
-export declare const amenityType: () => Promise<string[]>;
+export declare const amenityType: () => Promise<Place[]>;
+export declare const nearbyPlace: (lat: number, lon: number, amenity: string, radius: number) => Promise<Place[]>;
 /**
  * Lấy địa điểm theo ID
  * @param id - ID địa điểm

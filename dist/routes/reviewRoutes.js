@@ -4,6 +4,7 @@ const router = Router();
 //Lấy tất cả reviews
 router.get("/", reviewController.getAllReviews);
 router.get("/place/:placeId", reviewController.getAllReviews);
+router.post("/reviews ", reviewController.likeUpdatePlace);
 //Lấy một review dựa trên id của địa điểm nào đó
 router.get("/:id", reviewController.getReviewById);
 //Tạo một review mới

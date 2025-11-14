@@ -6,6 +6,7 @@ router.get("/", placeController.getAllPlaces);
 //Lấy loại để chọn
 router.get("/amenity", placeController.getAmenityTypes);
 router.get("/amenity/:amenity", placeController.getSpecificPlace);
+router.get("/nearby", placeController.getNearbyPlaces);
 router.post("/", placeController.createPlace);
 router.put("/:id", placeController.updatePlace);
 router.delete("/:id", placeController.deletePlace);
