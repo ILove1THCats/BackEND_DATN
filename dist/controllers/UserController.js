@@ -22,12 +22,12 @@ export const loginUser = async (req, res, next) => {
 };
 export const createUser = async (req, res, next) => {
     try {
-        const { full_name, email, password_hash, avatar_url, role } = req.body;
+        const { full_name, email, password_hash, role } = req.body;
         if (!full_name || !email || !password_hash) {
             return res.status(400).json({ message: 'Thiếu thông tin bắt buộc' });
         }
         const hashPass = await bcrypt.hash(password_hash, config.hashSaltRounds);
-        const newUser = await userModel.createUser(full_name, email, hashPass, avatar_url, role || "user");
+        const newUser = await userModel.createUser(full_name, email, hashPass, role || "user");
         res.status(201).json(newUser);
     }
     catch (error) {
@@ -111,5 +111,23 @@ export const resetPassword = async (req, res, next) => {
     catch (error) {
         next(error);
     }
+};
+export const getProfile = async (req, res, next) => {
+    try {
+        const id = Number(req.params.userid);
+        console.log(id);
+        if (!id) {
+            return res.status(400).json({ message: 'ID parameter is required' });
+        }
+        const user = await userModel.getUserById(id);
+        console.log(user);
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+        res.json(user);
+    }
+    catch (error) {
+        next(error);
+    }
+    ;
 };
 //# sourceMappingURL=UserController.js.map

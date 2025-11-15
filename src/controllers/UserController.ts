@@ -34,7 +34,7 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { full_name, email, password_hash, avatar_url, role } = req.body;
+    const { full_name, email, password_hash, role } = req.body;
 
     if (!full_name || !email || !password_hash) {
       return res.status(400).json({ message: 'Thiếu thông tin bắt buộc' });
@@ -42,7 +42,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
 
     const hashPass = await bcrypt.hash(password_hash, config.hashSaltRounds);
 
-    const newUser = await userModel.createUser(full_name, email, hashPass, avatar_url, role || "user");
+    const newUser = await userModel.createUser(full_name, email, hashPass, role || "user");
     res.status(201).json(newUser);
   } catch (error) {
     next(error);
@@ -130,7 +130,9 @@ export const getProfile = async (req: Request, res: Response, next: NextFunction
     }
 
     const user = await userModel.getUserById(id);
+
     if (!user) return res.status(404).json({ message: 'User not found' });
+
     res.json(user);
   } catch (error) {
     next(error);

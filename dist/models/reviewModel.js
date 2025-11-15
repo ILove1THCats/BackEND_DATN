@@ -59,13 +59,90 @@ export const getAverageRatingByPlace = async (placeId) => {
      GROUP BY place_id`, [placeId]);
     return result.rows[0] || { avg_rating: 0, total_reviews: 0 };
 };
-// export const likeUpdatePlace = async() => {
-//   const result = await pool.query(
-//     `SELECT 
-//       COUNT(*) AS
-//     FROM reviews
-//     WHERE place_id =$1
-//     GROUP BY place = id`, [placeI]
-//   );
-// }
+export const getLikePlace = async (placeId) => {
+    const { rows } = await pool.query(`SELECT COUNT(*) AS total FROM user_favorites where place_id = $1;`, [placeId]);
+    return Number(rows[0].total);
+};
+export const upLike = async (placeId, userId) => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        // 1) kiểm tra user tồn tại
+        const u = await client.query('SELECT 1 FROM users WHERE user_id = $1', [userId]);
+        if (u.rowCount === 0) {
+            await client.query('ROLLBACK');
+            return { error: 'User not found' };
+        }
+        // 2) ensure tourist_places
+        await client.query(`INSERT INTO tourist_places (place_id, name, geom)
+       SELECT p.id, COALESCE(p.name, 'Unnamed Place'), p.geom
+       FROM places p
+       WHERE p.id = $1
+         AND NOT EXISTS (SELECT 1 FROM tourist_places WHERE place_id = $1)`, [placeId]);
+        // 3) toggle
+        const del = await client.query('DELETE FROM user_favorites WHERE user_id = $1 AND place_id = $2 RETURNING *', [userId, placeId]);
+        if (del.rowCount ?? 0 > 0) {
+            await client.query('COMMIT');
+            return { action: 'removed' };
+        }
+        // 4) insert if not exists
+        const ins = await client.query(`INSERT INTO user_favorites (user_id, place_id)
+       SELECT $1, $2
+       WHERE NOT EXISTS (SELECT 1 FROM user_favorites WHERE user_id = $1 AND place_id = $2)
+       RETURNING *`, [userId, placeId]);
+        await client.query('COMMIT');
+        return { action: ins.rowCount ?? 0 > 0 ? 'added' : 'none' };
+    }
+    catch (e) {
+        await client.query('ROLLBACK');
+        throw e;
+    }
+    finally {
+        client.release();
+    }
+};
+export const getReviewFromPlace = async (placeId) => {
+    const result = await pool.query(`
+    SELECT r.review_id,
+          r.rating,
+          r.comment,
+          r.created_at,
+          u.full_name
+    FROM reviews r
+    JOIN users u
+        ON u.user_id = r.user_id
+    WHERE r.place_id = $1
+    ORDER BY RANDOM()
+    LIMIT 20;
+    `, [placeId]);
+    return result.rows;
+};
+export const reviewInsert = async (placeid, userid, rating, comment) => {
+    const client = await pool.connect();
+    try {
+        await client.query("BEGIN");
+        // 1. Ensure tourist_place exists
+        await client.query(`
+      INSERT INTO tourist_places (place_id, name, geom)
+      SELECT p.id, COALESCE(p.name, 'Unnamed Place'), p.geom
+      FROM places p
+      WHERE p.id = $1
+        AND NOT EXISTS (SELECT 1 FROM tourist_places WHERE place_id = $1);
+      `, [placeid]);
+        // 2. Insert review
+        await client.query(`
+      INSERT INTO reviews (place_id, user_id, rating, comment)
+      VALUES ($1, $2, $3, $4)
+      `, [placeid, userid, rating, comment]);
+        await client.query("COMMIT");
+        return { success: true };
+    }
+    catch (err) {
+        await client.query("ROLLBACK");
+        throw err;
+    }
+    finally {
+        client.release();
+    }
+};
 //# sourceMappingURL=reviewModel.js.map

@@ -26,10 +26,8 @@ export declare const updateReview: (req: Request, res: Response, next: NextFunct
  * DELETE /reviews/:id
  */
 export declare const deleteReview: (req: Request, res: Response, next: NextFunction) => Promise<Response<any, Record<string, any>> | undefined>;
-/**
- * Lấy trung bình rating của một địa điểm
- * GET /reviews/average/:placeId
- */
-export declare const getAverageRatingByPlace: (req: Request, res: Response, next: NextFunction) => Promise<void>;
-export declare const likeUpdatePlace: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getlikePlace: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const upLike: (req: Request, res: Response, next: NextFunction) => Promise<Response<any, Record<string, any>> | undefined>;
+export declare const getReviewFromPlace: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const reviewInsert: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 //# sourceMappingURL=ReviewController.d.ts.map

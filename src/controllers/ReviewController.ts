@@ -106,7 +106,9 @@ export const upLike = async (req: Request, res: Response, next: NextFunction) =>
     const userid = req.body.userid;
     const placeid =  req.body.placeid;
 
-    await reviewModel.upLike( userid, placeid);
+    await reviewModel.upLike( placeid, userid);
+
+    return res.status(200).json({ message: "Toggle like success" });
   } catch (e) {
     next(e);
   }
@@ -126,9 +128,9 @@ export const getReviewFromPlace = async (req: Request, res: Response, next: Next
 
 export const reviewInsert = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { placeid, userid, rating, comment, time } = req.body.review;
+    const { placeid, userid, rating, comment} = req.body.review;
 
-    const result = await reviewModel.reviewInsert( placeid, userid, rating, comment, time );
+    const result = await reviewModel.reviewInsert( placeid, userid, rating, comment);
 
     res.json(result);
   } catch (error) {

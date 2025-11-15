@@ -35,4 +35,16 @@ export declare const getAverageRatingByPlace: (placeId: number) => Promise<{
     avg_rating: number;
     total_reviews: number;
 }>;
+export declare const getLikePlace: (placeId: number) => Promise<number>;
+export declare const upLike: (placeId: number, userId: number) => Promise<{
+    error: string;
+    action?: never;
+} | {
+    action: string;
+    error?: never;
+}>;
+export declare const getReviewFromPlace: (placeId: number) => Promise<any[]>;
+export declare const reviewInsert: (placeid: number, userid: number, rating: number, comment: string) => Promise<{
+    success: boolean;
+}>;
 //# sourceMappingURL=reviewModel.d.ts.map

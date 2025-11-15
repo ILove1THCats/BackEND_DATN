@@ -14,7 +14,7 @@ export interface User {
 */
 export declare const getAllUsers: () => Promise<User[]>;
 export declare const getUserById: (id: number) => Promise<User | null>;
-export declare const createUser: (full_name: string, email: string, password_hash: string, avatar_url?: string, role?: "user" | "admin") => Promise<User>;
+export declare const createUser: (full_name: string, email: string, password_hash: string, role?: "user" | "admin") => Promise<User>;
 export declare const updateUser: (id: number, full_name?: string, email?: string, avatar_url?: string, role?: "user" | "admin") => Promise<User | null>;
 export declare const deleteUser: (id: number) => Promise<User | null>;
 export declare const getUserByEmail: (email: string) => Promise<User | null>;

@@ -11,10 +11,10 @@ export const getUserById = async (id) => {
     const result = await pool.query('SELECT * FROM users WHERE user_id = $1', [id]);
     return result.rows[0] || null;
 };
-export const createUser = async (full_name, email, password_hash, avatar_url, role = 'user') => {
-    const result = await pool.query(`INSERT INTO users (full_name, email, password_hash, avatar_url, role)
+export const createUser = async (full_name, email, password_hash, role = 'user') => {
+    const result = await pool.query(`INSERT INTO users (full_name, email, password_hash, role)
      VALUES ($1, $2, $3, $4, $5)
-     RETURNING *`, [full_name, email, password_hash, avatar_url, role]);
+     RETURNING *`, [full_name, email, password_hash, role]);
     return result.rows[0];
 };
 export const updateUser = async (id, full_name, email, avatar_url, role) => {
