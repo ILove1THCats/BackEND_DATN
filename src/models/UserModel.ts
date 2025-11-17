@@ -35,7 +35,7 @@ export const createUser = async (
 ): Promise<User> => {
   const result = await pool.query(
     `INSERT INTO users (full_name, email, password_hash, role)
-     VALUES ($1, $2, $3, $4, $5)
+     VALUES ($1, $2, $3, $4)
      RETURNING *`,
     [full_name, email, password_hash, role]
   );

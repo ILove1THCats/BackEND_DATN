@@ -115,12 +115,10 @@ export const resetPassword = async (req, res, next) => {
 export const getProfile = async (req, res, next) => {
     try {
         const id = Number(req.params.userid);
-        console.log(id);
         if (!id) {
             return res.status(400).json({ message: 'ID parameter is required' });
         }
         const user = await userModel.getUserById(id);
-        console.log(user);
         if (!user)
             return res.status(404).json({ message: 'User not found' });
         res.json(user);

@@ -87,7 +87,6 @@ export const deleteReview = async (req, res, next) => {
 export const getlikePlace = async (req, res, next) => {
     try {
         const placeId = Number(req.params.placeId);
-        console.log("place id là: ", placeId);
         const like = await reviewModel.getLikePlace(placeId);
         res.json(like);
     }
