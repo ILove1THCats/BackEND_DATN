@@ -18,6 +18,7 @@ app.get('/proxy', async (req, res) => {
     }
 
     const geoserverUrl = `http://localhost:8080/geoserver/Roads_guide/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Roads_guide:route&outputFormat=application/json&viewparams=x1:${x1};y1:${y1};x2:${x2};y2:${y2}`;
+    // const geoserverUrl = `http://localhost:8082/geoserver/Roads_guide/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Roads_guide:route&outputFormat=application/json&viewparams=x1:${x1};y1:${y1};x2:${x2};y2:${y2}`;
 
     const response = await fetch(geoserverUrl);
     const data = await response.json();
@@ -56,7 +57,7 @@ app.get('/proxy', async (req, res) => {
   }
 });
 
-app.listen(config.port, () => {
+app.listen(config.port, '0.0.0.0', () => {
   console.log(`Server running on port ${config.port}`);
 });
 

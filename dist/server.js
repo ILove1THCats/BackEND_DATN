@@ -49,7 +49,7 @@ app.get('/proxy', async (req, res) => {
         res.status(500).json({ error: 'Proxy fetch error' });
     }
 });
-app.listen(config.port, () => {
+app.listen(config.port, '0.0.0.0', () => {
     console.log(`Server running on port ${config.port}`);
 });
 function calculateDistance(line) {
